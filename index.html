@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>re/up - automatic asset reuploader</title>
+<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0b;
+--bg2:#111114;
+--bg3:#18181c;
+--line:#ffffff12;
+--line2:#ffffff22;
+--accent:#c8f84a;
+--accent2:#a8e620;
+--text:#f0f0ec;
+--muted:#888884;
+--muted2:#555552;
+--red:#ff4d4d;
+--blue:#4da8ff;
+--amber:#ffb84d;
+}
+html{scroll-behavior:smooth}
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'DM Sans',sans-serif;
+font-size:16px;
+line-height:1.6;
+overflow-x:hidden;
+}
+::selection{background:var(--accent);color:#0a0a0b}
+nav{
+position:fixed;top:0;left:0;right:0;z-index:100;
+padding:1.25rem 2rem;
+display:flex;align-items:center;justify-content:space-between;
+background:var(--bg);
+border-bottom:1px solid var(--line);
+}
+.logo{
+display:flex;align-items:center;gap:0.6rem;
+text-decoration:none;
+}
+.logo-img{
+width:28px;height:28px;
+border-radius:50%;
+object-fit:cover;
+border:1px solid var(--line2);
+}
+.logo-text{
+font-family:'Syne',sans-serif;
+font-weight:800;
+font-size:1.35rem;
+letter-spacing:-0.02em;
+color:var(--text);
+}
+.logo-text span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+color:var(--muted);
+text-decoration:none;
+font-size:0.875rem;
+font-weight:500;
+letter-spacing:0.02em;
+transition:color 0.15s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;gap:0.75rem;align-items:center}
+.nav-cta{
+background:var(--accent);
+color:#0a0a0b;
+border:none;
+padding:0.5rem 1.25rem;
+border-radius:4px;
+font-size:0.875rem;
+font-weight:600;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;
+text-decoration:none;
+transition:background 0.15s,transform 0.1s;
+}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+.nav-disc{
+color:var(--muted);
+border:1px solid var(--line2);
+padding:0.5rem 1rem;
+border-radius:4px;
+font-size:0.875rem;
+font-weight:500;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;
+text-decoration:none;
+transition:color 0.15s,border-color 0.15s;
+}
+.nav-disc:hover{color:var(--text);border-color:var(--muted2)}
+.hero{
+min-height:100vh;
+display:flex;
+align-items:center;
+padding:6rem 2rem 4rem;
+position:relative;
+overflow:hidden;
+}
+.hero-grid{
+position:absolute;inset:0;
+background-image:
+linear-gradient(var(--line) 1px, transparent 1px),
+linear-gradient(90deg, var(--line) 1px, transparent 1px);
+background-size:60px 60px;
+mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%);
+}
+.hero-inner{
+max-width:1100px;
+margin:0 auto;
+width:100%;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:4rem;
+align-items:center;
+position:relative;z-index:1;
+}
+.hero-badge{
+display:inline-flex;align-items:center;gap:0.5rem;
+background:var(--bg3);
+border:1px solid var(--line2);
+border-radius:100px;
+padding:0.3rem 0.85rem;
+font-size:0.75rem;
+font-family:'DM Mono',monospace;
+color:var(--muted);
+margin-bottom:1.5rem;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+h1{
+font-family:'Syne',sans-serif;
+font-weight:800;
+font-size:clamp(3rem,6vw,5.5rem);
+line-height:1;
+letter-spacing:-0.04em;
+margin-bottom:1.5rem;
+}
+h1 .slash{color:var(--accent)}
+h1 .dim{color:var(--muted2)}
+.hero-desc{
+color:var(--muted);
+font-size:1.1rem;
+line-height:1.7;
+margin-bottom:2.5rem;
+max-width:480px;
+font-weight:300;
+}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.btn-primary{
+background:var(--accent);
+color:#0a0a0b;
+border:none;
+padding:0.875rem 2rem;
+border-radius:4px;
+font-size:0.95rem;
+font-weight:700;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;
+text-decoration:none;
+display:inline-block;
+transition:background 0.15s,transform 0.1s;
+}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-ghost{
+color:var(--muted);
+border:1px solid var(--line2);
+padding:0.875rem 2rem;
+border-radius:4px;
+font-size:0.95rem;
+font-weight:500;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;
+text-decoration:none;
+display:inline-block;
+transition:color 0.15s,border-color 0.15s;
+}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted2)}
+.terminal{
+background:var(--bg2);
+border:1px solid var(--line2);
+border-radius:8px;
+overflow:hidden;
+font-family:'DM Mono',monospace;
+font-size:0.78rem;
+}
+.term-bar{
+background:var(--bg3);
+border-bottom:1px solid var(--line);
+padding:0.6rem 1rem;
+display:flex;gap:0.5rem;align-items:center;
+}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}
+.dot-y{background:#ffbd2e}
+.dot-g{background:#28c840}
+.term-title{margin:0 auto;color:var(--muted2);font-size:0.7rem}
+.term-body{padding:1.25rem 1rem;line-height:1.9}
+.tc{color:var(--accent)}
+.tm{color:var(--muted)}
+.ts{color:var(--blue)}
+.tw{color:var(--amber)}
+.cursor{display:inline-block;width:7px;height:0.9em;background:var(--accent);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+section{padding:6rem 2rem;border-top:1px solid var(--line)}
+.container{max-width:1100px;margin:0 auto;width:100%}
+.section-label{
+font-family:'DM Mono',monospace;
+font-size:0.7rem;
+letter-spacing:0.12em;
+color:var(--accent);
+text-transform:uppercase;
+margin-bottom:0.75rem;
+}
+.section-title{
+font-family:'Syne',sans-serif;
+font-weight:700;
+font-size:clamp(2rem,4vw,3rem);
+letter-spacing:-0.03em;
+line-height:1.1;
+margin-bottom:1.25rem;
+}
+.section-desc{color:var(--muted);font-size:1rem;line-height:1.7;max-width:580px;font-weight:300}
+.features-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:1px;
+background:var(--line);
+margin-top:4rem;
+border:1px solid var(--line);
+border-radius:8px;
+overflow:hidden;
+}
+.feature{
+background:var(--bg);
+padding:2rem;
+transition:background 0.2s;
+}
+.feature:hover{background:var(--bg2)}
+.feature-icon{
+width:36px;height:36px;
+border-radius:6px;
+background:var(--bg3);
+border:1px solid var(--line2);
+display:flex;align-items:center;justify-content:center;
+margin-bottom:1.25rem;
+}
+.fi-svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.feature h3{
+font-family:'Syne',sans-serif;
+font-weight:600;
+font-size:1rem;
+margin-bottom:0.5rem;
+letter-spacing:-0.01em;
+}
+.feature p{color:var(--muted);font-size:0.875rem;line-height:1.6;font-weight:300}
+.how-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:4rem;
+align-items:start;
+margin-top:4rem;
+}
+.steps{display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1.25rem;align-items:flex-start}
+.step-num{
+font-family:'DM Mono',monospace;
+font-size:0.7rem;
+color:var(--accent);
+background:var(--bg3);
+border:1px solid var(--line2);
+width:28px;height:28px;
+border-radius:4px;
+display:flex;align-items:center;justify-content:center;
+flex-shrink:0;
+margin-top:2px;
+}
+.step h4{
+font-family:'Syne',sans-serif;
+font-weight:600;
+font-size:0.975rem;
+margin-bottom:0.3rem;
+letter-spacing:-0.01em;
+}
+.step p{color:var(--muted);font-size:0.875rem;line-height:1.6;font-weight:300}
+.step code{
+background:var(--bg3);
+border:1px solid var(--line);
+padding:0.1rem 0.4rem;
+border-radius:3px;
+font-family:'DM Mono',monospace;
+font-size:0.78rem;
+color:var(--accent);
+}
+.asset-tags{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:2rem}
+.asset-tag{
+background:rgba(200,248,74,0.06);
+border:1px solid var(--accent);
+border-radius:4px;
+padding:0.4rem 1rem;
+font-family:'DM Mono',monospace;
+font-size:0.78rem;
+color:var(--accent);
+}
+.info-box{
+background:var(--bg2);
+border:1px solid var(--line2);
+border-left:2px solid var(--accent);
+border-radius:4px;
+padding:1rem 1.25rem;
+margin-top:1.5rem;
+font-size:0.85rem;
+color:var(--muted);
+line-height:1.6;
+font-weight:300;
+}
+.info-box strong{color:var(--text);font-weight:500}
+.stats-row{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:1px;
+background:var(--line);
+border:1px solid var(--line);
+border-radius:8px;
+overflow:hidden;
+margin-top:4rem;
+}
+.stat{
+background:var(--bg);
+padding:1.5rem 2rem;
+}
+.stat-val{
+font-family:'DM Mono',monospace;
+font-size:1.5rem;
+font-weight:500;
+color:var(--accent);
+margin-bottom:0.25rem;
+}
+.stat-label{
+font-size:0.8rem;
+color:var(--muted);
+font-weight:300;
+}
+.cl-list{margin-top:3rem}
+.cl-item{
+border-bottom:1px solid var(--line);
+padding:1.5rem 0;
+display:grid;
+grid-template-columns:140px 1fr;
+gap:2rem;
+align-items:start;
+}
+.cl-item:first-child{border-top:1px solid var(--line)}
+.cl-ver{font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--accent);font-weight:500}
+.cl-date{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted2);margin-top:0.25rem}
+.cl-changes{display:flex;flex-direction:column;gap:0.35rem}
+.cl-change{
+font-size:0.875rem;
+color:var(--muted);
+font-weight:300;
+display:flex;
+gap:0.5rem;
+align-items:flex-start;
+}
+.cl-change::before{content:'--';color:var(--muted2);flex-shrink:0;font-family:'DM Mono',monospace;font-size:0.75rem}
+.cta-section{
+background:var(--bg2);
+border-top:1px solid var(--line);
+padding:6rem 2rem;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
+.cta-glow{
+position:absolute;left:50%;top:50%;
+transform:translate(-50%,-50%);
+width:600px;height:300px;
+background:radial-gradient(ellipse,#c8f84a18 0%,transparent 70%);
+pointer-events:none;
+}
+.cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+footer{
+border-top:1px solid var(--line);
+padding:1.5rem 2rem;
+display:flex;
+align-items:center;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:1rem;
+}
+.footer-left{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted2)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:var(--muted2);text-decoration:none;font-size:0.8rem;transition:color 0.15s}
+.footer-links a:hover{color:var(--muted)}
+@media(max-width:768px){
+.hero-inner{grid-template-columns:1fr;gap:2.5rem}
+.features-grid{grid-template-columns:1fr}
+.how-grid{grid-template-columns:1fr}
+.stats-row{grid-template-columns:1fr}
+.cl-item{grid-template-columns:1fr;gap:0.5rem}
+nav .nav-links{display:none}
+h1{font-size:2.75rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="#" class="logo">
+<img src="kkitty.jpg" class="logo-img" alt="re/up">
+<span class="logo-text">re<span>/</span>up</span>
+</a>
+<ul class="nav-links">
+<li><a href="#features">features</a></li>
+<li><a href="#setup">setup</a></li>
+<li><a href="#changelog">changelog</a></li>
+</ul>
+<div class="nav-right">
+<a href="https://discord.gg/bm3v2qEjJF" class="nav-disc" target="_blank">discord</a>
+<a href="https://github.com/envyxity401-cyber/Reup-Updater/releases/tag/1.6.9" class="nav-cta" target="_blank">download</a>
+</div>
+</nav>
+
+<div class="hero">
+<div class="hero-grid"></div>
+<div class="hero-inner">
+<div>
+<div class="hero-badge">
+<span class="hero-badge-dot"></span>
+v1.6.9 latest
+</div>
+<h1>
+automatic<br>
+asset<br>
+<span class="slash">re/</span><span class="dim">up</span>loader
+</h1>
+<p class="hero-desc">
+bulk reupload roblox sounds, meshes, and animations to your account or group. install the app, paste your cookie, and let re/up handle the rest.
+</p>
+<div class="hero-actions">
+<a href="https://github.com/envyxity401-cyber/Reup-Updater/releases/tag/1.6.9" class="btn-primary" target="_blank">download v1.6.9</a>
+<a href="https://github.com/envyxity401-cyber/Reup-Updater/releases/tag/1.6.9" class="btn-ghost" target="_blank">github releases</a>
+</div>
+</div>
+<div class="terminal">
+<div class="term-bar">
+<div class="dot dot-r"></div>
+<div class="dot dot-y"></div>
+<div class="dot dot-g"></div>
+<span class="term-title">re/up backend</span>
+</div>
+<div class="term-body">
+<div><span class="ts">localhost started on port 38073.</span></div>
+<div><span class="tm">waiting to start reuploading...</span></div>
+<div>&nbsp;</div>
+<div><span class="tw">[INFO]</span> <span class="tm">getting current place details...</span></div>
+<div><span class="tw">[INFO]</span> <span class="tm">checking account permissions...</span></div>
+<div><span class="tc">[OK]</span><span class="tm"> universe access confirmed</span></div>
+<div>&nbsp;</div>
+<div><span class="tc">[01/48]</span> <span class="tm">Sound </span><span class="ts">rbxassetid://8271049</span></div>
+<div><span class="tc">[02/48]</span> <span class="tm">Sound </span><span class="ts">rbxassetid://8271050</span></div>
+<div><span class="tc">[03/48]</span> <span class="tm">Mesh&nbsp; </span><span class="ts">rbxassetid://8271051</span></div>
+<div><span class="tc">[04/48]</span> <span class="tm">Anim&nbsp; </span><span class="ts">rbxassetid://8271052</span></div>
+<div><span class="tc">...</span><span class="cursor"></span></div>
+</div>
+</div>
+</div>
+</div>
+
+<section id="features">
+<div class="container">
+<p class="section-label">capabilities</p>
+<h2 class="section-title">what re/up does</h2>
+<p class="section-desc">re/up runs a local server on your machine that your roblox studio plugin talks to. it checks permissions, fetches asset data, and reuploads everything automatically.</p>
+
+<div class="features-grid">
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</div>
+<h3>sound reupload</h3>
+<p>batch reuploads audio assets using a fixed window rate limiter. supports multiple accounts -- when one hits its roblox upload quota or gets rejected, re/up automatically rotates to the next account in the pool.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+</div>
+<h3>mesh reupload</h3>
+<p>reuploads meshes with correct joints, attributes, tags, and children preserved. up to 3000 uploads per minute. if a name is flagged as inappropriate it gets marked as censored and continues.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" style="fill:var(--muted);stroke:none"/></svg>
+</div>
+<h3>animation reupload</h3>
+<p>reuploads animations at up to 420 per minute with 24 concurrent uploads. handles rate limit backoff automatically -- if roblox returns a retry-after header, re/up waits exactly that long before retrying.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+</div>
+<h3>smart filtering</h3>
+<p>re/up skips assets that are already yours or already accessible from your place. only assets that actually need reuploading get processed -- nothing is done twice.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+</div>
+<h3>multi-account pool</h3>
+<p>add multiple roblox accounts in the desktop app. re/up rotates through them automatically when one gets rate limited or hits its quota, keeping uploads running without interruption.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">
+<svg class="fi-svg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</div>
+<h3>cancel and pause</h3>
+<p>cancel a job mid-run and choose whether to keep the ids already uploaded or discard them. pause and resume without losing progress. the server stays alive after a job finishes so you can rerun immediately.</p>
+</div>
+</div>
+
+<div class="stats-row">
+<div class="stat">
+<div class="stat-val">420/min</div>
+<div class="stat-label">animation upload rate</div>
+</div>
+<div class="stat">
+<div class="stat-val">3000/min</div>
+<div class="stat-label">mesh upload rate</div>
+</div>
+<div class="stat">
+<div class="stat-val">50</div>
+<div class="stat-label">assets per batch chunk</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="setup">
+<div class="container">
+<div class="how-grid">
+<div>
+<p class="section-label">setup guide</p>
+<h2 class="section-title">up and running<br>in minutes</h2>
+<p class="section-desc">everything comes bundled in the installer. no separate plugin download, no config files to hunt down.</p>
+<div class="asset-tags">
+<span class="asset-tag">sound</span>
+<span class="asset-tag">mesh</span>
+<span class="asset-tag">animation</span>
+<span class="asset-tag">user upload</span>
+<span class="asset-tag">group upload</span>
+</div>
+<div class="info-box">
+<strong>video tutorial coming soon.</strong> join the discord for updates and support in the meantime.
+</div>
+</div>
+<div>
+<div class="steps">
+<div class="step">
+<div class="step-num">01</div>
+<div>
+<h4>download and install</h4>
+<p>download the installer from the github releases page and run it. the desktop app and the roblox studio plugin are both installed automatically.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-num">02</div>
+<div>
+<h4>open the desktop app</h4>
+<p>launch re/up. paste your <code>.ROBLOSECURITY</code> cookie into the app. if you want multi-account support, add additional cookies here too.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-num">03</div>
+<div>
+<h4>open roblox studio</h4>
+<p>the plugin is already installed. open your game, find the re/up plugin in the toolbar, and select the asset type you want to reupload.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-num">04</div>
+<div>
+<h4>hit reupload</h4>
+<p>re/up checks permissions, fetches your assets, filters out anything already accessible, and reuploads everything to your account or group automatically.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-num">05</div>
+<div>
+<h4>rerun without restarting</h4>
+<p>when a job finishes the server stays alive. just hit reupload again from the plugin without touching the desktop app.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="changelog">
+<div class="container">
+<p class="section-label">changelog</p>
+<h2 class="section-title">v1.6.9</h2>
+<p class="section-desc">the latest release. join the discord for full patch notes and support.</p>
+<div class="cl-list">
+<div class="cl-item">
+<div>
+<div class="cl-ver">v1.6.9</div>
+<div class="cl-date">latest</div>
+</div>
+<div class="cl-changes">
+<div class="cl-change">current stable release</div>
+<div class="cl-change">download the installer above to get started</div>
+<div class="cl-change">join the discord for full patch notes and support</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="cta-section">
+<div class="cta-glow"></div>
+<div style="position:relative;z-index:1">
+<p class="section-label" style="margin-bottom:0.75rem">get started</p>
+<h2 class="section-title" style="max-width:600px;margin:0 auto 1rem">ready to start<br>reuploading?</h2>
+<p class="section-desc" style="margin:0 auto 2.5rem">download the installer or join the discord for help and updates.</p>
+<div class="cta-actions">
+<a href="https://github.com/envyxity401-cyber/Reup-Updater/releases/tag/1.6.9" class="btn-primary" target="_blank">download v1.6.9</a>
+<a href="https://discord.gg/bm3v2qEjJF" class="btn-ghost" target="_blank">join discord</a>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="footer-left">re/up v1.6.9</div>
+<div class="footer-links">
+<a href="https://github.com/envyxity401-cyber" target="_blank">github</a>
+<a href="https://discord.gg/bm3v2qEjJF" target="_blank">discord</a>
+</div>
+</footer>
+
+</body>
+</html>
